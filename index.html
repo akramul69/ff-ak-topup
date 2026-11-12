@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FF Ak TopUp - Free Fire Diamond Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff4757;
+            --secondary: #2ed573;
+            --dark: #1e1e2f;
+            --darker: #151521;
+            --card-bg: #262638;
+            --text: #ffffff;
+            --text-muted: #a4b0be;
+            --bkash-color: #E2136E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--darker);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #33334d;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--text);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .wallet-badge {
+            background: rgba(46, 213, 115, 0.15);
+            border: 1px solid var(--secondary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn {
+            background: #33334d;
+            color: var(--text);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid #33334d;
+        }
+
+        /* UID Input Section */
+        .uid-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .uid-input {
+            flex: 1;
+            background: var(--darker);
+            border: 2px solid #33334d;
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: var(--text);
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .uid-input:focus {
+            border-color: var(--primary);
+        }
+
+        .verify-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .verify-btn:hover {
+            opacity: 0.9;
+        }
+
+        .player-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--secondary);
+            display: none;
+        }
+
+        /* Packages Grid */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .package-card {
+            background: var(--darker);
+            border: 2px solid #33334d;
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .package-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .package-card.selected {
+            border-color: var(--primary);
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        .package-card img {
+            width: 45px;
+            height: 45px;
+            margin-bottom: 8px;
+        }
+
+        .package-card .amount {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .package-card .price {
+            font-size: 14px;
+            color: var(--secondary);
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pay-method {
+            flex: 1;
+            background: var(--darker);
+            border: 2px solid #33334d;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .pay-method.active {
+            border-color: var(--bkash-color);
+            background: rgba(226, 19, 110, 0.1);
+            color: var(--bkash-color);
+        }
+
+        /* Payment Instructions */
+        .instruction-box {
+            background: rgba(226, 19, 110, 0.08);
+            border: 1px dashed var(--bkash-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .instruction-box b {
+            color: var(--bkash-color);
+        }
+
+        .number-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--darker);
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-weight: 700;
+            color: var(--bkash-color);
+            border: 1px solid var(--bkash-color);
+        }
+
+        .copy-btn {
+            background: var(--bkash-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .trx-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .trx-input-group input {
+            background: var(--darker);
+            border: 2px solid #33334d;
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .trx-input-group input:focus {
+            border-color: var(--bkash-color);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), #ff6b81);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid #33334d;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Admin Panel Styles */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .admin-table th, .admin-table td {
+            border: 1px solid #33334d;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .admin-table th {
+            background: var(--darker);
+        }
+
+        .status-pending {
+            color: #f1c40f;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .action-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--darker);
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid #33334d;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-gamepad"></i> FF Ak <span>TopUp</span>
+        </div>
+        <div class="header-right">
+            <div class="wallet-badge" title="Wallet Balance">
+                <i class="fa-solid fa-wallet"></i> <span id="walletBalance">৳5,000</span>
+            </div>
+            <button class="nav-btn" onclick="openTrackModal()">
+                <i class="fa-solid fa-magnifying-glass"></i> Track
+            </button>
+            <button class="nav-btn" onclick="openAdminModal()">
+                <i class="fa-solid fa-lock"></i> Admin
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Step 1: Enter UID -->
+        <div class="card">
+            <div class="section-title"><i class="fa-solid fa-user"></i> ১. প্লেয়ার গেম UID দিন</div>
+            <div class="uid-box">
+                <input type="text" id="playerUid" class="uid-input" placeholder="Enter Player UID (যেমন: 123456789)">
+                <button class="verify-btn" onclick="verifyUid()">চেক করুন</button>
+            </div>
+            <div id="playerInfo" class="player-info">
+                <i class="fa-solid fa-circle-check"></i> প্লেয়ার ভেরিফাইড: <strong id="displayName"></strong>
+            </div>
+        </div>
+
+        <!-- Step 2: Select Diamond Package -->
+        <div class="card">
+            <div class="section-title"><i class="fa-solid fa-gem"></i> ২. ডায়মন্ড প্যাকেজ সিলেক্ট করুন</div>
+            <div class="packages-grid" id="packagesGrid">
+                <!-- Packages will be loaded by JS -->
+            </div>
+        </div>
+
+        <!-- Step 3: Payment Method -->
+        <div class="card">
+            <div class="section-title"><i class="fa-solid fa-wallet"></i> ৩. পেমেন্ট মেথড</div>
+            <div class="payment-methods">
+                <div class="pay-method active" id="bkashMethod" onclick="selectPayment('bkash')">
+                    <i class="fa-solid fa-mobile-screen"></i> bKash (Personal)
+                </div>
+                <div class="pay-method" id="walletMethod" onclick="selectPayment('wallet')">
+                    <i class="fa-solid fa-wallet"></i> Wallet (৳5,000)
+                </div>
+            </div>
+
+            <!-- bKash Instructions -->
+            <div id="bkashSection">
+                <div class="instruction-box">
+                    ১. বিকাশ অ্যাপ বা ডায়াল কোড (*247#) থেকে <b>Send Money</b> করুন।<br>
+                    ২. নিচে দেওয়া পার্সোনাল নম্বরে টাকা পাঠান।<br>
+                    ৩. রেফারেন্সে আপনার <b>গেম UID</b> দিন এবং নিচের বক্সে TrxID দিন।
+                    <div class="number-box">
+                        <span id="bkashNumberText">01625234273</span>
+                        <button class="copy-btn" onclick="copyNumber()">নম্বর কপি</button>
+                    </div>
+                </div>
+                <div class="trx-input-group">
+                    <input type="text" id="senderNumber" placeholder="আপনার বিকাশ নম্বর (যেমন: 017xxxxxxxx)">
+                    <input type="text" id="trxId" placeholder="TrxID (যেমন: 9N8K7L6M5)">
+                </div>
+            </div>
+
+            <!-- Wallet Instructions -->
+            <div id="walletSection" style="display: none;">
+                <div class="instruction-box" style="border-color: var(--secondary); background: rgba(46,213,115,0.08);">
+                    আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স রয়েছে (**৳5,000**)। সরাসরি ওয়ালেট থেকে পেমেন্ট করতে নিচে অর্ডারে ক্লিক করুন।
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="submitOrder()">অর্ডার কনফার্ম করুন</button>
+        </div>
+
+    </div>
+
+    <!-- Track Order Modal -->
+    <div id="trackModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('trackModal')">&times;</button>
+            <h3><i class="fa-solid fa-magnifying-glass"></i> অর্ডার ট্র্যাক করুন</h3>
+            <div class="uid-box" style="margin-top: 15px;">
+                <input type="text" id="searchUid" class="uid-input" placeholder="আপনার গেম UID বা Order ID দিন">
+                <button class="verify-btn" onclick="searchOrder()">খুঁজুন</button>
+            </div>
+            <div id="trackResult" style="margin-top: 15px; font-size: 14px;"></div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content" style="max-width: 650px;">
+            <button class="modal-close" onclick="closeModal('adminModal')">&times;</button>
+            <div id="adminLoginBox">
+                <h3><i class="fa-solid fa-lock"></i> অ্যাডমিন প্যানেল লগইন</h3>
+                <div class="uid-box" style="margin-top: 15px;">
+                    <input type="password" id="adminPin" class="uid-input" placeholder="পিন কোড দিন (ডিফল্ট: 1234)">
+                    <button class="verify-btn" onclick="loginAdmin()">লগইন</button>
+                </div>
+            </div>
+            <div id="adminDashboard" style="display: none;">
+                <h3><i class="fa-solid fa-gauge"></i> অ্যাডমিন ড্যাশবোর্ড</h3>
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>UID</th>
+                                <th>Package</th>
+                                <th>TrxID</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrderTable">
+                            <!-- Orders loaded by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 FF Ak TopUp. All rights reserved. Developed by Akramul.
+    </footer>
+
+    <script>
+        // Packages Data
+        const packages = [
+            { id: 1, diamonds: "25 💎", price: "৳25" },
+            { id: 2, diamonds: "50 💎", price: "৳48" },
+            { id: 3, diamonds: "115 💎", price: "৳95" },
+            { id: 4, diamonds: "240 💎", price: "৳190" },
+            { id: 5, diamonds: "610 💎", price: "৳470" },
+            { id: 6, diamonds: "Weekly", price: "৳165" },
+            { id: 7, diamonds: "Monthly", price: "৳820" }
+        ];
+
+        let selectedPackage = null;
+        let selectedPaymentMethod = 'bkash';
+        let walletBalance = 5000;
+        let orders = JSON.parse(localStorage.getItem('ff_orders')) || [];
+
+        // Render Packages
+        function renderPackages() {
+            const grid = document.getElementById('packagesGrid');
+            grid.innerHTML = '';
+            packages.forEach(pkg => {
+                const div = document.createElement('div');
+                div.className = `package-card ${selectedPackage && selectedPackage.id === pkg.id ? 'selected' : ''}`;
+                div.innerHTML = `
+                    <div class="amount">${pkg.diamonds}</div>
+                    <div class="price">${pkg.price}</div>
+                `;
+                div.onclick = () => selectPkg(pkg);
+                grid.appendChild(div);
+            });
+        }
+
+        function selectPkg(pkg) {
+            selectedPackage = pkg;
+            renderPackages();
+        }
+
+        // Verify UID
+        function verifyUid() {
+            const uid = document.getElementById('playerUid').value.trim();
+            const info = document.getElementById('playerInfo');
+            const nameSpan = document.getElementById('displayName');
+            
+            if(uid.length < 5) {
+                alert('দয়া করে সঠিক গেম UID দিন!');
+                return;
+            }
+
+            nameSpan.innerText = "Akramul_Pro [Verified]";
+            info.style.display = 'block';
+        }
+
+        // Select Payment Method
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+            document.getElementById('bkashMethod').classList.toggle('active', method === 'bkash');
+            document.getElementById('walletMethod').classList.toggle('active', method === 'wallet');
+            
+            document.getElementById('bkashSection').style.display = method === 'bkash' ? 'block' : 'none';
+            document.getElementById('walletSection').style.display = method === 'wallet' ? 'block' : 'none';
+        }
+
+        // Copy Number
+        function copyNumber() {
+            navigator.clipboard.writeText("01625234273");
+            alert('বিকাশ নম্বর কপি করা হয়েছে: 01625234273');
+        }
+
+        // Submit Order
+        function submitOrder() {
+            const uid = document.getElementById('playerUid').value.trim();
+            if(!uid) {
+                alert('আগে আপনার গেম UID দিন!');
+                return;
+            }
+            if(!selectedPackage) {
+                alert('দয়া করে একটি ডায়মন্ড প্যাকেজ সিলেক্ট করুন!');
+                return;
+            }
+
+            let paymentDetail = '';
+            if(selectedPaymentMethod === 'bkash') {
+                const sender = document.getElementById('senderNumber').value.trim();
+                const trx = document.getElementById('trxId').value.trim();
+                if(!sender || !trx) {
+                    alert('দয়া করে আপনার বিকাশ নম্বর এবং TrxID দিন!');
+                    return;
+                }
+                paymentDetail = `TrxID: ${trx} (${sender})`;
+            } else {
+                let priceVal = parseInt(selectedPackage.price.replace('৳', ''));
+                if(walletBalance < priceVal) {
+                    alert('আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই!');
+                    return;
+                }
+                walletBalance -= priceVal;
+                document.getElementById('walletBalance').innerText = `৳${walletBalance.toLocaleString()}`;
+                paymentDetail = `Paid from Wallet`;
+            }
+
+            const orderId = 'FF-' + Math.floor(100000 + Math.random() * 900000);
+            const newOrder = {
+                orderId: orderId,
+                uid: uid,
+                package: selectedPackage.diamonds + ' (' + selectedPackage.price + ')',
+                payment: paymentDetail,
+                status: 'Pending',
+                date: new Date().toLocaleTimeString()
+            };
+
+            orders.unshift(newOrder);
+            localStorage.setItem('ff_orders', JSON.stringify(orders));
+
+            alert(`অর্ডার সফলভাবে সাবমিট হয়েছে!\nOrder ID: ${orderId}`);
+            document.getElementById('playerUid').value = '';
+            document.getElementById('playerInfo').style.display = 'none';
+            if(selectedPaymentMethod === 'bkash') {
+                document.getElementById('senderNumber').value = '';
+                document.getElementById('trxId').value = '';
+            }
+        }
+
+        // Track Order Modal
+        function openTrackModal() {
+            document.getElementById('trackModal').style.display = 'flex';
+        }
+
+        function searchOrder() {
+            const query = document.getElementById('searchUid').value.trim();
+            const resultDiv = document.getElementById('trackResult');
+            if(!query) return;
+
+            const found = orders.filter(o => o.uid === query || o.orderId === query);
+            if(found.length === 0) {
+                resultDiv.innerHTML = '<span style="color:var(--primary);">কোনো অর্ডার পাওয়া যায়নি!</span>';
+                return;
+            }
+
+            let html = '';
+            found.forEach(o => {
+                html += `<div style="background:var(--darker); padding:10px; border-radius:8px; margin-bottom:8px;">
+                    <b>Order ID:</b> ${o.orderId} | <b>UID:</b> ${o.uid}<br>
+                    <b>Package:</b> ${o.package}<br>
+                    <b>Status:</b> <span class="${o.status === 'Completed' ? 'status-completed' : 'status-pending'}">${o.status}</span>
+                </div>`;
+            });
+            resultDiv.innerHTML = html;
+        }
+
+        // Admin Modal
+        function openAdminModal() {
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+
+        function loginAdmin() {
+            const pin = document.getElementById('adminPin').value.trim();
+            if(pin === '1234') {
+                document.getElementById('adminLoginBox').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                renderAdminOrders();
+            } else {
+                alert('ভুল পিন কোড দিয়েছেন!');
+            }
+        }
+
+        function renderAdminOrders() {
+            const tbody = document.getElementById('adminOrderTable');
+            tbody.innerHTML = '';
+            if(orders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">কোনো অর্ডার নেই</td></tr>`;
+                return;
+            }
+            orders.forEach((o, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${o.orderId}</td>
+                    <td>${o.uid}</td>
+                    <td>${o.package}</td>
+                    <td>${o.payment}</td>
+                    <td><span class="${o.status === 'Completed' ? 'status-completed' : 'status-pending'}">${o.status}</span></td>
+                    <td>${o.status === 'Pending' ? `<button class="action-btn" onclick="completeOrder(${index})">Complete</button>` : 'Done'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function completeOrder(index) {
+            orders[index].status = 'Completed';
+            localStorage.setItem('ff_orders', JSON.stringify(orders));
+            renderAdminOrders();
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Initialize
+        renderPackages();
+    </script>
+</body>
+</html>
